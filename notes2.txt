@@ -1,14 +1,14 @@
-Create a new project:
-    -First create a new folder into the htdocs
-    -After you opened the project type this into the terminal:
-        -npm init -y
-    -Then download the packages(This should create a node_modules directory and fill them with the packages):
-        -Express: npm install express
-        -Pug: npm install pug
-        -MongoDB: npm install mongoose
-        -Bootstrap: npm install bootstrap
-        -Nodemon: npm install -g nodemon
-    -Now create an index.js file and try to follow this data structure:
+Létrehozás új projekt:
+    - Először hozz létre egy új mappát a htdocs mappában
+    - Miután megnyitottad a projektet, írd be ezt a terminálba:
+        - npm init -y
+    - Ezután töltsd le a csomagokat (Ez létrehoz egy node_modules könyvtárat és feltölti a csomagokkal):
+        - Express: npm install express
+        - Pug: npm install pug
+        - MongoDB: npm install mongoose
+        - Bootstrap: npm install bootstrap
+        - Nodemon: npm install -g nodemon
+    - Most hozz létre egy index.js fájlt, és kövesd ezt a mappastruktúrát:
         myproject/
         ├── node_modules/
         ├── public/
@@ -22,30 +22,30 @@ Create a new project:
         ├── package-lock.json
         ├── package.json
 
-Start MongoDB:
-    -If you do not have a folder in the C:\Program Files named MongoDB then you need to do it manualy first
-    -If you have everything correctly then you shoud start the MongoDB by typing this into the cmd:
-        -"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath=C:\data\db
-    -Then open the MongoDB Compass and click on Connect
+MongoDB indítása:
+    - Ha nincs C:\Program Files mappában egy MongoDB nevű mappa, akkor először manuálisan kell létrehoznod
+    - Ha minden rendben van, indítsd el a MongoDB-t az alábbi parancs begépelésével a cmd-be:
+        - "C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath=C:\data\db
+    - Ezután nyisd meg a MongoDB Compass-t, és kattints a Connect gombra
 
-Start server:
-    -In the terminal opne a new cmd.exe:
-        -cmd.exe
-    -Then(if you downloaded the Nodemon) then you can start it like this:
-        -nodemon index.js
+Szerver indítása:
+    - Nyiss egy új cmd.exe-t a terminálban:
+        - cmd.exe
+    - Ezután (ha letöltötted a Nodemon-t), így indíthatod:
+        - nodemon index.js
 
-Set index.js:
-    -Set the require packages:
-        -Default:
+index.js beállítása:
+    - Szükséges csomagok beállítása:
+        - Alapértelmezett:
             const http = require('http');
             const os = require('os');
             const path = require('path');
             const fs = require('fs');
 
-        -Pug:
+        - Pug:
             const pug = require('pug');
 
-        -Express:
+        - Express:
             const express = require("express");
             const app = express();
             const router = express.Router();
@@ -57,26 +57,26 @@ Set index.js:
             app.use(express.static("./public/js/"));
             app.use(express.static("./public/css/"));
 
-        -BodyParser: 
+        - BodyParser: 
             const bodyParser = require('body-parser');
             app.use(bodyParser.urlencoded({ extended: true }));
 
-        -MongoDB:
-            const {MongoClient} = require("mongodb"); //HERE YOU NEED THIS: {MongoClient}
-            const { log } = require('console'); //HERE YOU NEED THIS: { log }
+        - MongoDB:
+            const {MongoClient} = require("mongodb"); //IDE SZÜKSÉGES: {MongoClient}
+            const { log } = require('console'); //IDE SZÜKSÉGES: { log }
             const url = "mongodb://localhost:27017";
             const client = new MongoClient(url);
             global.dbName = "{DatabaseName}";
 
-        -If you use the database.js then:
-            -Include the database.js:
+        - Ha használod a database.js-t, akkor:
+            - Töltsd be a database.js-t:
                 const db = require('./basicMongoFunctions');
-            -Set up the global variables:
+            - Állítsd be a globális változókat:
                 db.dbName = "{DatabaseName}";
                 db.client = {Client};
     
-    -After you include everything you need you need to set up this base async function:
-    IMPORTANT: the app.get("*") always should be called at the bottom of the function!
+    - Miután mindent betöltöttél, be kell állítanod ezt az alap async függvényt:
+    FONTOS: az app.get("*") mindig a függvény végén legyen meghívva!
         async function Main() 
         {
             try
@@ -96,49 +96,48 @@ Set index.js:
             }
         }
 
-    -Then you just need to call the funcion on the bottom of the page and you are ready to fight:
+    - Ezután csak hívd meg a függvényt az oldal alján, és készen állsz:
         Main();  
 
-Extend a pug page with an other one:
-    If they are in the same directory:
-        -extends {PageName}.pug
-    If its out one with a directory:
-        -extends ../{PageName}.pug
+Pug oldal kiterjesztése egy másikkal:
+    Ha ugyanabban a könyvtárban vannak:
+        - extends {PageName}.pug
+    Ha egy könyvtárral kijjebb van:
+        - extends ../{PageName}.pug
 
-Setup databese:
-IMPORTANT: After you create a database you wont see it as long as you do not have tables in it.
-    -First you need to create the database, for this the best if you write a route for it like this:
+Adatbázis beállítása:
+FONTOS: Miután létrehoztál egy adatbázist, nem fogod látni, amíg nincsenek táblák benne.
+    - Először létre kell hoznod az adatbázist, erre a legjobb, ha írsz egy útvonalat hozzá, így:
         app.get("/create_database", (req, res) => {
             db.createDb();
             res.render('home');
         });
 
-    -Then here is how you can create the tables into the database:
+    - Ezután itt van, hogyan hozhatsz létre táblákat az adatbázisban:
         app.get("/fill_database", (req, res) => {
             db.createCollection("{TableName}");
         });
 
-
-Handel a Table in mongodb and node.js (referred as Model for the better examples).
-To be easy you need to create a folder with your Model name then create the index.pug, show.pug, edit.pug, create.pug
-Index, here you need to list all of the speciments from the Model:
+Egy tábla kezelése a mongodb-ben és a node.js-ben (a jobb példák érdekében Modelként hivatkozunk rá).
+Könnyen kezelhető, ha létrehozol egy mappát a Model nevével, majd létrehozod az index.pug, show.pug, edit.pug, create.pug fájlokat
+Index, itt kell felsorolnod az összes példányt a Modelből:
     app.get("/{ModelName}/index", async (req, res) => {
         const {Array} = await db.listAll("{TableName}");
         res.render('{FolderName}/index', { {Array}: {Array} });
     });
 
-Show, here you only need to display one speciment by id:
+Show, itt csak egy példányt kell megjelenítened az id alapján:
     app.get("/{ModelName}/show/:id", async (req, res) => {
         const {Speciment} = await db.findOne("{TableName}", "id", Number.parseInt(req.params.id));
         res.render('{FolderName}/show', { {Speciment}: {Speciment} });
     });
 
-Create, here you just only need to redirect the user to the create page:
+Create, itt csak át kell irányítanod a felhasználót a létrehozási oldalra:
     app.get("/{ModelName}/create", (req, res) => {
         res.render('{FolderName}/create');
     });
 
-Add(or Store), here you need to upload in to the database the created speciment, for the edit you will need a PRIMAR KEY so thats included too:
+Add(or Store), itt kell feltöltened az adatbázisba a létrehozott példányt, a szerkesztéshez szükséged lesz egy PRIMÁR KULCSra, ezért ez is szerepel:
     app.post('/{Model}/add', async (req, res) => {
         let _id = 1;
         let {Array} = await db.SortBy("{TableName}", "id", "DESC");
@@ -155,18 +154,18 @@ Add(or Store), here you need to upload in to the database the created speciment,
         };
         await db.createDoc("{TableName}", {NewSpeciment});
         
-        //Query again the speciments from the table
+        //Kérdezd le újra a példányokat a táblából
         {Array} = await db.listAll("{TableName}");
         return res.render('{FolderName}/index', { {Array}: {Array} });
     });
 
-Edit, here you only need to redirect the user the page where they can edit the speciment
+Edit, itt csak át kell irányítanod a felhasználót arra az oldalra, ahol szerkesztheti a példányt
     app.get("/{ModelName}/edit/:id", async (req, res) => {
         let {Speciment} = await db.findOne("{TableName}", "id", Number.parseInt(req.params.id));
         res.render('writers/edit', { {Speciment}: {Speciment} });
     });
 
-Update, here you need to update the datas in the database(aka delete and create again)
+Update, itt frissítened kell az adatokat az adatbázisban (vagyis töröld és hozz létre újra)
     app.post('/{ModelName}/update', async (req, res) => {
         const { id, {Data1}, {Data2} } = req.body;
     
@@ -183,28 +182,30 @@ Update, here you need to update the datas in the database(aka delete and create 
         return res.render('{FolderName}/index', { {NewSpeciment}: {NewSpeciment} });
     });
 
-Delete...well you just need to delete the speciment:
+Törlés... nos, csak törölnöd kell a példányt:
     app.get("/{ModelName}/delete/:id", async (req, res) => {
         await db.deleteOne("{TableName}", "id", Number.parseInt(req.params.id));
 
         const {Array} = await db.listAll("{TableName}");
         res.render('{FolderName}/index', { {Array}: {Array} });
+
+
     });
 
-Possible errors here:
-    -Not loadnig the page when you open it with params, thats becuse you give the params incorrectly, this is how you should add two or more param:
-        -res.render('{FolderName}/{Page}', { {Data1}: {Data1}, {Data2}: {Data2} });
-    -If you are already in a folder then you need to call the page and dont need to call the folder again
-        -For example: If you are in the writer/create and you have a button there thats create a writer than you only need to call the create
-    -If you are just geting a PENDING promise its becuse you call an async function in a non async function
-    -If you getting an error at the update page you forgoth to eather give or recive the error...trust me
-    -If you can not select a speciment by id its becuse you not converting the id, it should look like this: 
-        -{Speciment}: await db.findOne("{Table}", "id", Number.parseInt({id}))
-    -If that s*t is not willing to be deleted thats becuse you are giving a varible in an other type then its in the database...trust me...it is MongoDB
+Lehetséges hibák itt:
+    - Nem töltődik be az oldal, amikor paraméterekkel nyitod meg, ennek oka, hogy helytelenül adod meg a paramétereket, így kell két vagy több paramétert megadni:
+        - res.render('{FolderName}/{Page}', { {Data1}: {Data1}, {Data2}: {Data2} });
+    - Ha már egy mappában vagy, akkor csak az oldalt kell hívnod, és nem kell újra hívnod a mappát
+        - Például: Ha a writer/create oldalon vagy, és van ott egy gomb, ami írót hoz létre, akkor csak a create-et kell hívnod
+    - Ha csak egy PENDING ígéretet kapsz, akkor egy aszinkron függvényt hívsz meg egy nem aszinkron függvényben
+    - Ha hibát kapsz a frissítő oldalon, akkor elfelejtetted vagy megadni, vagy fogadni a hibát... bízz bennem
+    - Ha nem tudsz kiválasztani egy példányt id alapján, akkor nem konvertálod az id-t, így kell kinéznie:
+        - {Speciment}: await db.findOne("{Table}", "id", Number.parseInt({id}))
+    - Ha az a s*ar nem hajlandó törlődni, akkor azért van, mert más típusú változót adsz meg, mint ami az adatbázisban van... bízz bennem... ez MongoDB
 
-Forntend for each type:
-IMPORTANT: DOnt you dare to forget the extend and the block content
-Index(Use this for the show... its the same but without the each):
+Frontend minden típushoz:
+FONTOS: Ne merészeld elfelejteni a kiterjesztést és a block content-et
+Index (Ezt használd a show-ra... ugyanaz, de each nélkül):
     each {Speciment} in {Array} 
         h5 #{{Data1}.{Property}}
         h5 #{book.writer_id.name}
@@ -215,33 +216,33 @@ Index(Use this for the show... its the same but without the each):
             div.col
                 div.card.m-2
                     a.btn.btn-warning(href=`/{Model}/edit/${Speciment.id}`) Edit
-                div.col
-                    div.card.m-2
-                a.btn.btn-danger(href=`/{Model}/delete/${Speciment.id}`) Delete
+            div.col
+                div.card.m-2
+                    a.btn.btn-danger(href=`/{Model}/delete/${Speciment.id}`) Delete
 
 Create
     form(method="POST", action="add")
-        input(type="text", name="{PROPERTY NAME}", class="form-control" placeholder="{What ever you want...}" required)
+        input(type="text", name="{PROPERTY NAME}", class="form-control" placeholder="{Amit akarsz...}" required)
         textarea(type="text", name="{PROPERTY NAME}", class="form-control" rows="2" required)
-        input(type="number", name="{PROPERTY NAME}", class="form-control" placeholder="{What ever you want}" required)
+        input(type="number", name="{PROPERTY NAME}", class="form-control" placeholder="{Amit akarsz}" required)
         input(type="date", name="{PROPERTY NAME}", class="form-control" required) 
-        //This will only work if you give the array to the page as a parameter
+        //Ez csak akkor működik, ha az array-t paraméterként adod az oldalhoz
         select(class="form-control" name='{PROPERTY NAME}')
             each {Speciment} in {Array}
-                option(value={Speciment.id}) #{ {Speciment.Property} }  //example: option(value=writer.id) #{writer.name}
+                option(value={Speciment.id}) #{ {Speciment.Property} }  //példa: option(value=writer.id) #{writer.name}
         button(type="submit" class="btn btn-dark") Create
 
 Edit:
-    form(method="POST", action="/{Model}/{Route}") //Sometimes you need to define the whole route... sometimes not, use the working one
+    form(method="POST", action="/{Model}/{Route}") //Néha meg kell adnod az egész útvonalat... néha nem, használd a működőt
         input(type="hidden" name="id" value={Speciment.id})
         input(type="text", name="{PROPERTY NAME}", class="form-control" value={Speciment.Property} required)
         textarea(name="{PROPERTY NAME}", class="form-control" rows="2")= {Speciment.Property}
         input(type="number", name="{PROPERTY NAME}", class="form-control" value={Speciment.Property} required) 
         input(type="date", name="{PROPERTY NAME}", class="form-control" value={Speciment.Property} required)
-        //This will only work if you give the array to the page as a parameter
+        //Ez csak akkor működik, ha az array-t paraméterként adod az oldalhoz
         select(class="form-control" name='{PROPERTY NAME}')
             each {Speciment} in {Array}
-                if {Speciment.id} == {Speciment.foreginID}  //example: if writer.id == book.writer.id
+                if {Speciment.id} == {Speciment.foreginID}  //példa: if writer.id == book.writer.id
                     option(selected='true' value={Speciment.id})={Speciment.name}
                 else
                     option(value={Speciment.id})={Speciment.name}

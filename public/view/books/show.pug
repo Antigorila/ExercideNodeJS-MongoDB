@@ -1,0 +1,16 @@
+extends ../header.pug
+
+block content
+    div(class='card bg-dark m-2')
+        div(class="card-body")
+            div(class="card")
+                div(class="card bg-dark text-white")
+                    div(class="row")
+                        h5(class="card-title m-1 text-center") #{book.title}
+                        h6(class="card-title m-1 text-center") #{book.writer_id.name}
+                    hr(class="text-white m-2")
+                    i(class="m-1 text-center") #{book.release_date}
+                    div(class="card m-2")
+                        p(class="card-text m-1") #{book.description}
+                    i(class="m-1") Rating: #{book.rating}
+                    i(class="m-1") Price: #{book.price}

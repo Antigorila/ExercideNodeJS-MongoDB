@@ -15,10 +15,14 @@ block content
                                     i(class="m-1") #{writer.born_at}
                                 hr(class="text-white m-1")
                                 p(class="card-text m-1") #{writer.introduction}
-                                div(class="card m-2")
-                                    a(class="btn btn-primary" href=`/writers/show/${writer.id}`) Show
-                                div(class="card m-2")
-                                    a(class="btn btn-warning" href=`/writers/edit/${writer.id}`) Edit
-                                div(class="card m-2")
-                                    a(class="btn btn-danger"  href=`/writers/delete/${writer.id}`) Delete
+                                div.row
+                                    div.col
+                                        div.card.m-2
+                                            a.btn.btn-primary(href=`/writers/show/${writer.id}`) Show
+                                    div.col
+                                        div.card.m-2
+                                            a.btn.btn-warning(href=`/writers/edit/${writer.id}`) Edit
+                                    div.col
+                                        div.card.m-2
+                                            a.btn.btn-danger(href=`/writers/delete/${writer.id}`) Delete
                                     

@@ -1,0 +1,36 @@
+extends ../header.pug
+
+block content
+    div(class='card bg-dark m-2')
+        div(class="card-body")
+            div(class="card")
+                div(class="card bg-dark")
+                    form(method="POST", action="/books/update")
+                        input(type="hidden" name="id" value=book.id)
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Book title:
+                            input(type="text", name="title", class="form-control" value=book.title required) 
+                            hr(class="text-white")
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Book description:
+                            textarea(name="description", class="form-control" rows="2")= book.description
+                            hr(class="text-white")
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Price:
+                            input(type="number", name="price", class="form-control" value=book.price required) 
+                            hr(class="text-white")
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Release date:
+                            input(type="date", name="release_date", class="form-control" value=book.release_date required) 
+                            hr(class="text-white")
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Writer:
+                            select(class="form-control" name='writer_id')
+                                each writer in writers
+                                    if writer.id == book.writer_id.id
+                                        option(selected='true' value=writer.id)=writer.name
+                                    else
+                                        option(value=writer.id)=writer.name
+                            hr(class="text-white")
+                        div(class="card m-3 mt-0")
+                            button(type="submit" class="btn btn-dark") Update writer

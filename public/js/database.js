@@ -12,7 +12,8 @@ async function createDb()
     const dbObject = await client.db(dbName);
     console.log(`${dbName} was created successfully.`);
 }
-  
+
+//CREATE TABLE
 async function createCollection(collectionName) 
 {
     const dbObject = await client.db(dbName);
@@ -20,6 +21,7 @@ async function createCollection(collectionName)
     console.log(`${collectionName} was created successfully`);
 }
   
+//INSERT INTO  
 async function createDoc(collectionName, doc) 
 {
     const dbObject = await client.db(dbName);
@@ -29,7 +31,8 @@ async function createDoc(collectionName, doc)
       `The new document was created with the following id: ${result.insertedId}`
     );
 }
-  
+
+//INSERT INTO...more
 async function createDocs(collectionName, docs) 
 {
     const dbObject = await client.db(dbName);
@@ -38,7 +41,8 @@ async function createDocs(collectionName, docs)
     console.log(`The new document was created with the following ids:`);
     console.log(result.insertedIds);
 }
-  
+
+//SELECT *
 async function listAll(collectionName) 
 {
     const dbObject = await client.db(dbName);
@@ -46,7 +50,8 @@ async function listAll(collectionName)
     const result = await collection.find({}).toArray();
     return result;
 }
-  
+
+//SELECT * WHERE
 async function findOne(collectionName, key, value) 
 {
     const dbObject = await client.db(dbName);
@@ -54,7 +59,7 @@ async function findOne(collectionName, key, value)
     const result = await collection.find({ [key]: value }).toArray();
     return result[0];
 }
-  
+
 //$eq (==), $gt (>), $gte (>=), lt (<), lte  (<=), $ne (!=), $nin (!= with any value (NOT IN)), $in (= with any value (IN))
 async function QueryBuilder(collectionName,key,operator,conditionValue)
 {
@@ -65,7 +70,8 @@ async function QueryBuilder(collectionName,key,operator,conditionValue)
       .toArray();
     return result;
 }
-  
+
+//ASC, DESC
 async function SortBy(collectionName, sortByKey, direction) 
 {
     const dbObject = await client.db(dbName);
@@ -93,6 +99,7 @@ async function deleteMany(collectionName, key, condition, conditionValue)
     console.log(`The items was deleted successfully!`);
 }
   
+//DROP TABLE
 async function deleteCollection(collectionName) 
 {
     const dbObject = await client.db(dbName);
