@@ -1,0 +1,16 @@
+extends ../header.pug
+
+block content
+    div(class='card bg-dark m-2')
+        div(class="card-body")
+            div(class="card")
+                a(href="create" class="btn btn-dark") Add writer
+            div(class="card mt-3")
+                div(class="card bg-dark text-white")
+                    div(class="card m-2")
+                        div(class="card bg-dark text-white")
+                            div(class="row")
+                                h5(class="card-title m-1") #{writer.name}
+                                i(class="m-1") #{writer.born_at}
+                            hr(class="text-white m-1")
+                            p(class="card-text m-1") #{writer.introduction}           

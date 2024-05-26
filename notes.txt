@@ -1,0 +1,197 @@
+Create a new project:
+    -First create a new folder into the htdocs
+    -After you opened the project type this into the terminal:
+        -npm init -y
+    -Then download the packages(This should create a node_modules directory and fill them with the packages):
+        -Express: npm install express
+        -Pug: npm install pug
+        -MongoDB: npm install mongoose
+        -Bootstrap: npm install bootstrap
+        -Nodemon: npm install -g nodemon
+    -Now create an index.js file and try to follow this data structure:
+        myproject/
+        ├── node_modules/
+        ├── public/
+        │   ├── css/
+        │   │   └── styles.css
+        │   ├── js/
+        │   │   └── scripts.js
+        │   ├── view/
+        │   │   └── index.pug
+        ├── index.js
+        ├── package-lock.json
+        ├── package.json
+
+Start MongoDB:
+    -If you do not have a folder in the C:\Program Files named MongoDB then you need to do it manualy first
+    -If you have everything correctly then you shoud start the MongoDB by typing this into the cmd:
+        -"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath=C:\data\db
+    -Then open the MongoDB Compass and click on Connect
+
+Start server:
+    -In the terminal opne a new cmd.exe:
+        -cmd.exe
+    -Then(if you downloaded the Nodemon) then you can start it like this:
+        -nodemon index.js
+
+Set index.js:
+    -Set the require packages:
+        -Default:
+            const http = require('http');
+            const os = require('os');
+            const path = require('path');
+            const fs = require('fs');
+
+        -Pug:
+            const pug = require('pug');
+
+        -Express:
+            const express = require("express");
+            const app = express();
+            const router = express.Router();
+
+            app.set('view engine', 'pug');
+            app.set('views', path.join(__dirname, 'public', '{ViewFolderName}'));
+            app.use(express.static(path.join(__dirname ,"/node_modules/bootstrap/dist/css")));
+            app.use(express.static("./node_modules/bootstrap/dist/js"));
+            app.use(express.static("./public/js/"));
+            app.use(express.static("./public/css/"));
+
+        -BodyParser: 
+            const bodyParser = require('body-parser');
+            app.use(bodyParser.urlencoded({ extended: true }));
+
+        -MongoDB:
+            const {MongoClient} = require("mongodb"); //HERE YOU NEED THIS: {MongoClient}
+            const { log } = require('console'); //HERE YOU NEED THIS: { log }
+            const url = "mongodb://localhost:27017";
+            const client = new MongoClient(url);
+            global.dbName = "{DatabaseName}";
+
+        -If you use the database.js then:
+            -Include the database.js:
+                const db = require('./basicMongoFunctions');
+            -Set up the global variables:
+                db.dbName = "{DatabaseName}";
+                db.client = {Client};
+    
+    -After you include everything you need you need to set up this base async function:
+    IMPORTANT: the app.get("*") always should be called at the bottom of the function!
+        async function Main() 
+        {
+            try
+            {
+                app.get("*", (req, res) => {
+                    res.send("Page not found");
+                });
+                
+                app.listen(3000, () => {
+                    console.log("http://localhost:3000/");
+                });
+            }
+            catch (ex)
+            {
+                console.log("--ERROR--")
+                console.log(ex)
+            }
+        }
+
+    -Then you just need to call the funcion on the bottom of the page and you are ready to fight:
+        Main();  
+
+Extend a pug page with an other one:
+    If they are in the same directory:
+        -extends {PageName}.pug
+    If its out one with a directory:
+        -extends ../{PageName}.pug
+
+Setup databese:
+IMPORTANT: After you create a database you wont see it as long as you do not have tables in it.
+    -First you need to create the database, for this the best if you write a route for it like this:
+        app.get("/create_database", (req, res) => {
+            db.createDb();
+            res.render('home');
+        });
+
+    -Then here is how you can create the tables into the database:
+        app.get("/fill_database", (req, res) => {
+            db.createCollection("{TableName}");
+        });
+
+
+Handel a Table in mongodb and node.js (referred as Model for the better examples).
+To be easy you need to create a folder with your Model name then create the index.pug, show.pug, edit.pug, create.pug
+Index, here you need to list all of the speciments from the Model:
+    app.get("/{ModelName}/index", async (req, res) => {
+        const {Array} = await db.listAll("{TableName}");
+        res.render('{FolderName}/index', { {Array}: {Array} });
+    });
+
+Show, here you only need to display one speciment by id:
+    app.get("/{ModelName}/show/:id", async (req, res) => {
+        const {Speciment} = await db.findOne("{TableName}", "id", Number.parseInt(req.params.id));
+        res.render('{FolderName}/show', { {Speciment}: {Speciment} });
+    });
+
+Create, here you just only need to redirect the user to the create page:
+    app.get("/{ModelName}/create", (req, res) => {
+        res.render('{FolderName}/create');
+    });
+
+Add(or Store), here you need to upload in to the database the created speciment, for the edit you will need a PRIMAR KEY so thats included too:
+    app.post('/{Model}/add', async (req, res) => {
+        let _id = 1;
+        let {Array} = await db.SortBy("{TableName}", "id", "DESC");
+        if ({Array}.length > 0) 
+        {
+            _id = {Array}[0].id + 1;
+        } 
+
+        const { {Data1}, {Data2} } = req.body;
+        const {NewSpeciment} = {
+            id: _id,
+            data1: {Data1},
+            data2: {Data2}
+        };
+        await db.createDoc("{TableName}", {NewSpeciment});
+        
+        //Query again the speciments from the table
+        {Array} = await db.listAll("{TableName}");
+        return res.render('{FolderName}/index', { {Array}: {Array} });
+    });
+
+Edit, here you only need to redirect the user the page where they can edit the speciment
+    app.get("/{ModelName}/edit/:id", async (req, res) => {
+        let {Speciment} = await db.findOne("{TableName}", "id", Number.parseInt(req.params.id));
+        res.render('writers/edit', { {Speciment}: {Speciment} });
+    });
+
+Update, here you need to update the datas in the database(aka delete and create again)
+    app.post('/{ModelName}/update', async (req, res) => {
+        const { id, {Data1}, {Data2} } = req.body;
+    
+        await db.deleteOne("{TableName}", "id", Number.parseInt(id));
+        
+        const {NewSpeciment} = {
+            id: Number.parseInt(id),
+            data1: {Data1},
+            data2: {Data2},
+        };
+        await db.createDoc("{TableName}", {NewSpeciment});
+        
+        const {Array} = await db.listAll("{TableName}");
+        return res.render('{FolderName}/index', { {NewSpeciment}: {NewSpeciment} });
+    });
+
+Delet...well you just need to delete the speciment:
+    app.get("/{ModelName}/delete/:id", async (req, res) => {
+        await db.deleteOne("{TableName}", "id", Number.parseInt(req.params.id));
+
+        const {Array} = await db.listAll("{TableName}");
+        res.render('{FolderName}/index', { {Array}: {Array} });
+    });
+
+Possible errors here:
+    -If you are already in a folder then you need to call the page and dont need to call the folder again
+        -For example: If you are in the writer/create and you have a button there thats create a writer than you only need to call the create
+    -If you are just geting a PENDING promise its becuse you call an async function in a non async function

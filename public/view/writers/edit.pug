@@ -1,0 +1,23 @@
+extends ../header.pug
+
+block content
+    div(class='card bg-dark m-2')
+        div(class="card-body")
+            div(class="card")
+                div(class="card bg-dark")
+                    form(method="POST", action="/writers/edit_writer") // Update the action URL to match the route
+                        input(type="hidden" name="id" value=writer.id)
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Writer name:
+                            input(type="text", name="name", class="form-control" value=writer.name) 
+                            hr(class="text-white")
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Writer introduction:
+                            textarea(name="introduction", class="form-control" rows="2")= writer.introduction
+                            hr(class="text-white")
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Born at:
+                            input(type="date", name="born_at", class="form-control" value=writer.born_at) 
+                            hr(class="text-white")
+                        div(class="card m-3 mt-0")
+                            button(type="submit" class="btn btn-dark") Save

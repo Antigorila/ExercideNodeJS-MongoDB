@@ -1,0 +1,22 @@
+extends ../header.pug
+
+block content
+    div(class='card bg-dark m-2')
+        div(class="card-body")
+            div(class="card")
+                div(class="card bg-dark")
+                    form(method="POST", action="add_writer")
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Writer name:
+                            input(type="text", name="name", class="form-control" placeholder="Writer Name" required) 
+                            hr(class="text-white")
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Writer introduction:
+                            textarea(type="text", name="introduction", class="form-control" placeholder="Writer Introduction" rows="2" required) 
+                            hr(class="text-white")
+                        div(class="form-group m-3")
+                            label(for="name" class="text-white") Born at:
+                            input(type="date", name="born_at", class="form-control" placeholder="Born at" required) 
+                            hr(class="text-white")
+                        div(class="card m-3 mt-0")
+                            button(type="submit" class="btn btn-dark") Add writer
