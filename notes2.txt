@@ -201,7 +201,7 @@ Lehetséges hibák itt:
     - Ha hibát kapsz a frissítő oldalon, akkor elfelejtetted vagy megadni, vagy fogadni a hibát... bízz bennem
     - Ha nem tudsz kiválasztani egy példányt id alapján, akkor nem konvertálod az id-t, így kell kinéznie:
         - {Speciment}: await db.findOne("{Table}", "id", Number.parseInt({id}))
-    - Ha az a s*ar nem hajlandó törlődni, akkor azért van, mert más típusú változót adsz meg, mint ami az adatbázisban van... bízz bennem... ez MongoDB
+    - Ha az a sz@r nem hajlandó törlődni, akkor azért van, mert más típusú változót adsz meg, mint ami az adatbázisban van... bízz bennem... ez MongoDB
 
 Frontend minden típushoz:
 FONTOS: Ne merészeld elfelejteni a kiterjesztést és a block content-et
